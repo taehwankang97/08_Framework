@@ -69,7 +69,7 @@ public class ForwardTestController {
   * 특수한 경우를 제외하고 
   * 매핑 주소 제일 앞에 "/"를 적지 않는다 */
 	
-	@RequestMapping("forward")
+	@RequestMapping("forward") // forward 요청매핑(GET/POST 가리지 않음)
 	public String forwardTest() {
 		
 		System.out.println("/forward 매핑됐는지 확인");
@@ -89,7 +89,7 @@ public class ForwardTestController {
 		 * 
 		 * */
 		
-		
+	// classpath:/templates/forward.html
 		return "forward";
 	}
 	
