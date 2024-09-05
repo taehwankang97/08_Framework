@@ -27,6 +27,6 @@ public class MainController {
 		// classpath:/templates/common/main.html 파일로 forward
 		return "common/main";
 	}
-	
+
 	
 }

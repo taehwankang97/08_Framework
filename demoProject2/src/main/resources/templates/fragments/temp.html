@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코드 조각모음</title>
+</head>
+<body>
+   
+  <!-- 메뉴라는 이름을 가진 조각 -->
+  <div th:fragment= "menu">
+    <ul>
+      <li><a href="#">메뉴1</a></li>
+      <li><a href="#">메뉴2</a></li>
+      <li><a href="#">메뉴3</a></li>
+      <li><a href="#">메뉴4</a></li>
+      <li><a href="#">메뉴5</a></li>
+      <li><a href="#">메뉴6</a></li>
+    </ul>
+  </div>
+
+<h1 style="background-color: red; color: white;"
+th:fragment= "fr-test">
+  thymeleaf fragment 테스트 중
+</h1>
+
+
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  
+</body>
+</html><!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>타임리프 예제 4(조건문)</title>
+</head>
+<body>
+  <h1>타임리프 예제 4(조건문)</h1>
+
+  <h3> th:if  / th:unless </h3>
+  <pre>
+    th:if = "조건식"
+    - 조건식이 true인 경우에 수행
+
+    th:unless = "조건식"
+    - 조건식이 false인 경우에 수행
+  </pre>
+
+  <!-- th:block 태그 
+    - 타임리프에 존재하는 유일한 태그
+    - 타임리프가 해석된 후 사라짐
+     -> 타임리프가 적용될만한 마땅한 태그가 없을 때
+        또는
+        조건문, 반복문 가독성을 증가 시키고 싶을 때 사용
+  -->
+        
+  <th:block th:if= "${std == null}">
+    <h3>std 없음</h3>
+  </th:block>
+
+  <th:block th:unless= "${std == null}">
+    <h3 th:text="${std}">std.toString() 출력</h3>
+  </th:block>
+
+<h3>조건식에 작성된 변수에 값이 존재하는지 확인하는 방법 </h3>
+
+<p>
+  th:if = "${변수명| key}"
+  <br>
+  -> 변수의 값이 있으면 true, 없으면 null
+</p>
+
+<!-- th:if = "${std}" == th:if = "${std != null}" -->
+<th:block th:if = "${std}">
+  <h3>std 있음 </h3>
+</th:block>
+
+<th:block th:unless = "${std}">
+  <h3>std 없음...</h3>
+</th:block>
+
+<hr>
+<h3> th:switch / th:case </h3>
+
+<th:block th:switch="${num}">
+
+<!-- ${num} 값이 100인 경우 -->
+<p th:case="100">
+AAAAAAAAAAA
+</p>
+<p th:case="200">
+BBBBBBBBBBBBB
+</p>
+<!-- th:case="*" 마지막에만 작성 가능  -->
+<p th:case="*">
+CCCCCCCCCCCCCCCCCC
+</p>
+
+</th:block>
+
+<hr>
+<h3>삼항 연산자 </h3>
+
+<pre>
+  (조건식 ? true인 경우 : false인 경우)
+</pre>
+
+<!-- 타임리프에서 
+ 문자열은 "",'' 가리지 않고 작성 가능 
+ 왜? 작성법은 HTML이니까 가능 -->
+<h4 th:text="${std.age == 5} ? '잼민이 입니다':'잼민이 아님'"></h4>
+<h4 th:text="${std.name == '맹구'} ? '맹구임':'맹구아님'"></h4>
+
+<h3>Elvis 연산자 (?:)</h3>
+
+<pre>
+  [작성법]
+  값 ? : 값이 없을 때
+
+  - 값이 존재하는 경우 : 값 출력
+  - 값이 존재하지 않는 경우 -> 값이 없을 때 출력
+</pre>
+
+<h4 th:text="${std} ?: '학생없음'"></h4>
+<h4 th:text="${member} ?: '없음'"></h4>
+
+<h3>No-Operation 연산자 (값 ?: _)</h3>
+
+<pre>
+  -값이 존재하지 않을 경우 
+    태그 사이에 작성된 내용(content 영역)을 
+    출력하는 연산자
+
+</pre>
+
+<h4 th:text="${std} ?:_">std정보 출력</h4>
+<h4 th:text="${member} ?:_"><img src="/images/logo.gif"></h4>
+
+</body>
+</html>
