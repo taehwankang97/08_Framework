@@ -55,9 +55,10 @@
 	
 	</select>
 	
-	<!-- 할 일 수정 -->
+	
+	<!-- 완료 여부 변경 -->
 	<update id="todoComplete">
-			UPDATE TB_TODO
+		UPDATE TB_TODO
 		SET
 			TODO_COMPLETE = 
 				DECODE(TODO_COMPLETE, 0, 1, 0)
@@ -65,7 +66,9 @@
 			TODO_NO = #{todoNo}
 	</update>
 	
-	<update id="todoupdate">
+	
+	<!-- 할 일 수정 -->
+	<update id="todoUpdate" parameterType="Todo">
 		UPDATE TB_TODO
 		SET
 			TODO_TITLE = #{todoTitle},
@@ -74,13 +77,25 @@
 			TODO_NO = #{todoNo}
 	</update>
 	
-	<delete id="todoDelete"
-	parameterType ="_int">
-		DELETE
-		FROM
-			TB_TODO
-		WHERE TODO_NO= #{todoNo}
-	
+	<!-- 할 일 삭제 -->
+	<delete id="todoDelete" parameterType="_int">
+		DELETE FROM TB_TODO
+		WHERE TODO_NO = #{todoNo}
 	</delete>
+	
+	
+	
+	<!-- 제목 검색 -->
+	<select id="searchTitle" 
+			
+		parameterType="_int"
+			resultType="string">
+		SELECT TODO_TITLE
+		FROM TB_TODO
+		WHERE TODO_NO = #{todoNo}
+	</select>
+	
+	
+	
 
 </mapper>

@@ -68,6 +68,14 @@ public int todoDelete(int todoNo) {
 	
 	return mapper.todoDelete(todoNo);
 }
+
+@Override
+public String searchTitle(int todoNo) {
+	return mapper.searchTitle(todoNo);
+	
 }
+}
+
+
 
 
