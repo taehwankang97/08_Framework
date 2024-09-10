@@ -1,5 +1,6 @@
 package edu.kh.todolist.service;
 
+import java.util.List;
 import java.util.Map;
 
 import edu.kh.todolist.dto.Todo;
@@ -29,11 +30,17 @@ public interface TodoListService {
 	 */
 	int todoComplete(int todoNo);
 
-	int todoupdate(Todo todo);
+	int todoUpdate(Todo todo);
 
 	int todoDelete(int todoNo);
 
 	String searchTitle(int todoNo);
+
+	int getTotalCount();
+
+	int getCompleteCount();
+
+	List<Todo> getTodoList();
 
 	
 }

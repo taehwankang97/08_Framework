@@ -37,11 +37,15 @@ public interface TodoListMapper {
 	 * @param todo
 	 * @return	result
 	 */
-	int todoupdate(Todo todo);
+	int todoUpdate(Todo todo);
 
 	int todoDelete(int todoNo);
 
 	String searchTitle(int todoNo);
+
+	int getTotalCount();
+
+	int selectcomleteCount();
 
 	
 	

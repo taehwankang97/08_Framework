@@ -59,9 +59,9 @@ public class TodoListServiceImpl implements TodoListService{
 	}
 	
 @Override
-public int todoupdate(Todo todo) {
+public int todoUpdate(Todo todo) {
 	
-	return mapper.todoupdate(todo);
+	return mapper.todoUpdate(todo);
 }
 @Override
 public int todoDelete(int todoNo) {
@@ -74,6 +74,29 @@ public String searchTitle(int todoNo) {
 	return mapper.searchTitle(todoNo);
 	
 }
+//전체 할 일 개수 조회
+@Override
+public int getTotalCount() {
+	return mapper.getTotalCount();
+}
+
+@Override
+public int getCompleteCount() {
+	
+	return mapper.selectCompleteCount();
+}
+
+@Override
+public List<Todo> getTodoList() {
+	
+	return mapper.selectTodoList();
+	
+}
+
+
+
+
+
 }
 
 
