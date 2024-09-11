@@ -87,7 +87,7 @@ public class UserController {
 	/** userNo가 일치하는 사용자 조회
 	 * @param userNo : 주소에 작성된 사용자 번호
 	 * @param model : 데이터 전달용 객체
-	 * @param ra :
+	 * @param ra : 리다이렉트 시 request scope로 값 전달하는 객체
 	 * @return
 	 */
 	@GetMapping("select/{userNo}")
@@ -223,7 +223,7 @@ public class UserController {
 		String message = null;
 		
 		if(result > 0) {
-			path = "redirect:/user/selectAll"; // 목록
+			path = "redirect:/user/selectAll"; // 목록으로 이동 selectAll 재요청 하기위해 redirect 작성
 			message = user.getUserId() + "님이 추가 되었습니다";
 			
 		}else {
@@ -232,6 +232,7 @@ public class UserController {
 	}
 		
 		ra.addFlashAttribute("message", message);
+		
 		return path;
 	
 	
