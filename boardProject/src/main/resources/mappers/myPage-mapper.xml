@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<!-- Mapper 인터페이스와 연결하는 방법 : 
+  namespace 속성 값으로 Mapper 인터페이스의 패키지명 + 인터페이스명 작성
+  -->
+<mapper namespace="edu.kh.project.myPage.mapper.MyPageMapper">
+  
+  <!-- parameter Type은 TypeHandler가 자동 인식  -->
+  <update id="updateInfo">
+  UPDATE "MEMBER"
+		SET 
+			MEMBER_NICKNAME = #{memberNickname},
+			MEMBER_TEL = #{memberTel},
+			MEMBER_ADDRESS = #{memberAddress}
+		WHERE
+			MEMBER_NO = #{memberNo}
+  </update>
+  
+  <!-- select 태그 resultType||Map 필수 ! -->
+  <select id="checkNickname" resultType="_int">
+  	SELECT COUNT(*)
+  	FROM "MEMBER"
+  	WHERE MEMBER_NO > 0 
+  	AND MEMBER_NICKNAME = #{input}
+  </select>
+  <!-- WHERE MEMBER_NO > 0 
+  	인덱스 객체를 사용해서 검색 속도 향상 시키기-->
+  
+</mapper>
