@@ -16,4 +16,13 @@ public interface MyPageService {
 	 */
 	int checkNickname(String input);
 
+	int changePw(String currentPw, String newPw, Member loginMember);
+
+	/**
+	 * @param memberPw
+	 * @param loginMember
+	 * @return
+	 */
+	int secession(String memberPw, Member loginMember);
+
 }

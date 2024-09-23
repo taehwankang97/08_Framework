@@ -27,4 +27,21 @@
   <!-- WHERE MEMBER_NO > 0 
   	인덱스 객체를 사용해서 검색 속도 향상 시키기-->
   
+  <update id="changePw">
+  	UPDATE "MEMBER"
+  		SET 
+  			MEMBER_PW = #{encPw}
+  		WHERE 
+  			MEMBER_NO = #{memberNo}
+  
+  </update>
+  
+  <update id="secession">
+  	UPDATE "MEMBER"
+  		SET
+  			MEMBER_DEL_FL = 'Y'
+  		WHERE
+  			MEMBER_NO = #{memberNo}
+  </update>
+  
 </mapper>

@@ -27,8 +27,11 @@ function findAddress() {
 }
 
 /* 주소 검색 버튼 클릭 시*/
-document.querySelector("#findAddressBtn")
+if(document.querySelector("#findAddressBtn") !== null ){
+  document.querySelector("#findAddressBtn")
   .addEventListener("click", findAddress);
+
+}
 
 // 함수명만 작성하는 경우 
 // 함수명() 작성하는 경우 : 함수에 정의된 내용을 실행
@@ -42,14 +45,20 @@ document.querySelector("#findAddressBtn")
 
 // 입력 값이 유효한 형태인지 표시하는 객체(체크리스트)
 const checkObj = {
-  "memberNickname" : true
+  "memberNickname" : true,
+  "memberTel" : true 
 }
 
 /* 닉네임 검사 */
 // - 3글자 이상
 // - 중복 X
 const memberNickname = document.querySelector("#memberNickname");
-memberNickname.addEventListener("input", () => {
+// 객체?.속성 -> ? : 안전 탐색 연산자
+// - 객체가 null 또는 undifined가 아니면 수행
+
+// 기존 닉네임
+const originalNickname = memberNickname?.value;
+memberNickname?.addEventListener("input", () => {
   // input이벤트 : 입력과 관련된 모든 동작 (JS를 이용한 값세팅 제외)
 
   // 입력된 값 얻어오기(양쪽 공백 제거)
@@ -67,6 +76,37 @@ memberNickname.addEventListener("input", () => {
     return;
   }
 
+  // 입력된 닉네임이 기존 닉네임과 일치하는 경우
+  if(originalNickname === inputValue){
+     // 클래스 제거
+     memberNickname.classList.remove("green");
+     memberNickname.classList.remove("red");
+ 
+     // 닉네임이 유효하지 않다고 기록
+     checkObj.memberNickname = true;
+     return;
+ 
+  }
+
+  /* 닉네임 유효성 검사  */ 
+  // - 영어 또는 숫자 또는 한글만 작성 가능
+  // - 3글자 ~ 10글자
+  const lengthCheck = inputValue.length >= 3 && inputValue.length <= 10;
+  const validCharactersCheck = /^[a-zA-Z0-9가-힣]+$/.test(inputValue); // 영어, 숫자, 한글만 허용
+  
+  // ^ : 캐럿 -> 시작
+  // $ : 달러 -> 끝
+  //[] : 한 칸 (한 문자)에 들어갈 수 있는 문자 패턴 기록
+  // + : 1개 이상
+
+if((lengthCheck && validCharactersCheck) === false){
+  memberNickname.classList.remove("green");
+  memberNickname.classList.add("red");
+
+  // 닉네임이 유효하지 않다고 기록
+  checkObj.memberNickname = false;
+  return;
+}
 
   // 비동기로 입력된 닉네임
   // DB에 존재하는지 확인하는 Ajax 코드(fetch() API) 작성
@@ -91,6 +131,7 @@ memberNickname.addEventListener("input", () => {
       return;
     }
 
+
     // 중복이 아닌 경우
     memberNickname.classList.add("green");
     memberNickname.classList.remove("red");
@@ -101,3 +142,221 @@ memberNickname.addEventListener("input", () => {
 
 
 });
+//--------------------------------------------------------------------------------------------------------------
+/*전화번호 유효성 검사*/
+const memberTel = document.querySelector("#memberTel");
+
+memberTel?.addEventListener("input", ()=>{ // ? 안전탐색 연산자
+
+// 입력된 전화 번호
+const inputTel = memberTel.value.trim();
+
+// 전화번호 정규식 검사
+
+// 010으로 시작하고 11글자 
+const validFormat = /^010\d{8}$/; 
+
+// 입력 받은 전화번호가 유효한 형식이 아닌 경우 
+if(!validFormat.test(inputTel)){
+
+ memberTel.classList.add("red");
+ memberTel.classList.remove("green");
+
+ checkObj.memberTel = false;
+return;
+}else{
+  memberTel.classList.remove("red");
+ memberTel.classList.add("green");
+
+ checkObj.memberTel = true;
+}
+
+
+
+})
+//----------------------------------------------------------------------------------------------------
+/*내 정보 수정 form 제출시 */
+
+const updateInfo = document.querySelector("#updateInfo");
+
+updateInfo?.addEventListener("submit", e=>{
+
+  // checkObj에 작성된 값 검사하기 
+  // -> 닉네임, 전화번호 유효한지 검사
+
+  // for ~ in 구문 : JS 객체의 key값을 하나씩 접근하는 반복문 
+  for(let key in checkObj){ // 향상된 for문 
+    // 닉네임, 전화번호 중 유료하지 않은 값이 있을 경우
+    if(checkObj[key] === false){
+
+      let str = "안바꿔 줄꺼임";
+
+      switch(key){
+        case "memberNickname" : str =  "닉네임" + str;
+           break;
+        case "memberTel" : str =  "전화번호" + str;
+           break;
+      }
+      alert(str); // OOO이 유효하지 않습니다 출력
+      e.preventDefault();// form 제출 막기
+      document.getElementById(key).focus(); // focus 맞추기 
+      return;
+    }
+  } // for in end
+
+  /* 주소 유효성 검사 */
+  // - 모두 작성 또는 모두 미작성 
+
+ /*  const postcode = document.querySelector("#postcode").value.trim();
+  const address = document.querySelector("#address").value.trim();
+  const detailAddress = document.querySelector("#detailAddress").value.trim(); */
+
+  const addr = document.querySelectorAll("[name = memberAddress]");
+
+  let empty = 0; // 비어있는 input의 개수
+  let notEmpty = 0; // 비어있지 않은 input의 개수 
+
+  // for ~ of() : 향상된 for문 
+  for(let item of addr){
+   let len = item.value.trim().length; // 작성된 값의 길이 얻어오기
+   if(len > 0) notEmpty++; // 비어있지 않은 경우
+   else        empty++;    // 비어있을 경우
+  }
+  // empty, notEmpty 중 3이 하나도 없을 경우 
+  if (empty < 3 && notEmpty < 3){
+    alert("주소가 유효하지 않습니다");
+    e.preventDefault();
+    return;
+  }
+})
+
+
+
+
+
+
+
+
+//-------------------------------------------------------------------------------------------------------
+
+/* 비밀번호 변경 */
+
+// 비밀번호 변경 form태그
+const changePw = document.querySelector("#changePw");
+
+// "변경하기" 버튼 클릭 시 또는 form 내부 엔터 입력 시
+// == submit (제출)
+changePw?.addEventListener("submit", e => {
+
+  // e.preventDefault(); // 기본 이벤트 막기
+  // -> form의 기본 이벤트인 제출 막기
+  // -> 유효성 검사 조건이 만족되지 않을 때 수행
+
+  // 입력 요소 모두 얻어오기
+  const currentPw = document.querySelector("#currentPw");
+  const newPw = document.querySelector("#newPw");
+  const newPwConfirm = document.querySelector("#newPwConfirm");
+
+  // 1. 현재 비밀번호, 새 비밀번호, 새 비밀번호 확인 
+  //  입력 여부 체크
+  let str; // undefined 상태
+
+  if(newPwConfirm.value.trim().length == 0)
+    str = "새 비밀번호 확인을 입력해 주세요";
+  
+  if(newPw.value.trim().length == 0)
+    str = "새 비밀번호를 입력해 주세요";
+  
+  if(currentPw.value.trim().length == 0)
+    str = "현재 비밀번호를 입력해 주세요";
+
+  if(str !== undefined){ // 입력되지 않은 값이 존재
+    alert(str);
+    e.preventDefault(); // form 제출 막기
+    return; // submit 이벤트 핸들러 종료
+  }
+
+  // 2. 새 비밀번호가 알맞은 형태로 작성 되었는가 확인
+  // - 영어(대소문자 가리지 X) 1글자 이상
+  // - 숫자 1글자 이상
+  // - 특수문자 (! @ # _ -) 1글자 이상
+  // - 최소 6글자 최대 20글자
+
+  /* 정규 표현식(regEx) */
+  // https://developer.mozilla.org/ko/docs/Web/JavaScript/Guide/Regular_expressions
+
+  // - 문자열에서 특정 문자 조합을 찾기 위한 패턴
+
+  // ex) 숫자가 3개 이상 작성된 문자열 조합 찾기
+  // "12abc" -> X
+  // "444"   -> O
+  // "1q2w3e" -> O
+
+  /* [JS 정규 표현식 객체 생성 방법]
+  1) /정규표현식/
+  2) new RegExp("정규표현식")
+  */
+
+  const lengthCheck = newPw.value.length >= 6 && newPw.value.length <= 20;
+  const letterCheck = /[a-zA-Z]/.test(newPw.value); // 영어 알파벳 포함
+  const numberCheck = /\d/.test(newPw.value); // 숫자 포함
+  const specialCharCheck = /[\!\@\#\_\-]/.test(newPw.value); // 특수문자 포함
+
+  // 조건이 하나라도 만족하지 못하면
+  if ( !(lengthCheck && letterCheck && numberCheck && specialCharCheck) ) {
+    alert("영어,숫자,특수문자 1글자 이상, 6~20자 사이로 입력해주세요")
+    e.preventDefault();
+    return;
+  }
+
+
+  // 3. 새 비밀번호, 새 비밀번호 확인이 같은지 체크
+  if(newPw.value !== newPwConfirm.value){
+    alert("새 비밀번호가 일치하지 않습니다");
+    e.preventDefault();
+    return;
+  }
+
+});
+
+// -------------------------------------------------------------------------------------------------
+
+/* 회원 탈퇴 유효성 검사 */
+
+const secession = document.querySelector("#secession");
+secession?.addEventListener("submit", e=>{
+
+  // 비밀번호 입력 확인 
+  const memberPw = document.querySelector("#memberPw");
+  if(memberPw.value.trim().length === 0){// 미입력시 
+    alert("비밀번호를 입력해 주세요");
+    e.preventDefault();
+    return;
+  }
+
+  //2) 체크 되었는지 검사 
+  const agree = document.querySelector("#agree");
+
+  if(agree.checked === false){// 체크가 되어있지 않은 경우 
+    alert("탈퇴를 원하시면 동의를 체크해 주세요");
+    e.preventDefault();
+    return;
+  }
+
+  //3) confirm을 이용해서 탈퇴할건지 확인
+  if(confirm("진짜 탈퇴 할껴?") === false){// 취소 클릭시 
+    alert("오케이");
+    e.preventDefault();
+    return;
+
+
+  }
+
+})
+
+
+
+
+
+
+
