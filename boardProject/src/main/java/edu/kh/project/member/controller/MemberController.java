@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -16,6 +17,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 
 @SessionAttributes({"loginMember"})
@@ -96,7 +98,22 @@ public class MemberController {
 		
 		
 		return "redirect:/"; // 메인 페이지 리다이렉트
-	}
+	}/* Cookie란?
+ * - 클라이언트 측(브라우저)에서 관리하는 데이터(파일 형식)
+ * 
+ * - Cookie에는 만료기간, 데이터(key=value), 사용하는 사이트(주소)
+ *  가 기록되어 있음
+ *  
+ * - 클라이언트가 쿠키에 기록된 사이트로 요청으로 보낼 때
+ *   요청에 쿠키가 담겨져서 서버로 넘어감
+ *   
+ * - Cookie의 생성, 수정, 삭제는 Server가 관리
+ *   저장은 Client가 함
+ *   
+ * - Cookie는 HttpServletResponse를 이용해서 생성,
+ *   클라이언트에게 전달(응답) 할 수 있다
+ */
+
 	/** 로그아웃
 	 * @param status
 	 * @return
@@ -117,23 +134,65 @@ public class MemberController {
 		return "redirect:/";// 메인페이지
 	}
 	
+	@GetMapping("signUp")
+	public String signUp() {
+		
+		return "member/signUp";
+	}
+	
+	/** 회원가입 수행
+	 * @param inputMember : 입력값이 저장된 Member 객체 (커맨드 객체)
+	 * @param ra : 리다이렉트 시 request scope 로 값 전달
+	 * @return
+	 */
+	@PostMapping("signUp")
+	public String signUp(
+			@ModelAttribute Member inputMember,
+			RedirectAttributes ra
+			) {
+		
+		// 회원가입 서비스 호출 
+		int result = service.signUp(inputMember);
+		
+		// 서비스 결과에 따라 응답 제어
+		String path = null;
+		String message = null;
+		
+		if(result > 0) {
+			path = "/";
+			message = "회원 가입 실패....";
+		}else {
+			path = "signUp";
+			message = "가입 성공....";
+		}
+		
+		ra.addFlashAttribute("message",message);
+		
+		return "redirect:" + path;
+	}
+	/** 이메일 중복 검사 (비동기)
+	 * @param email : 입력된 이메일 
+	 * @return 0 : 중복 X 1 : 중복 
+	 * 
+	 */
+	@ResponseBody // 반환 값을 응답 본문 (ajax 코드)로 반환
+	@GetMapping("emailCheck")
+	public int emailCheck(
+			@RequestParam("email") String email
+			) {
+		return service.emailCheck(email);
+	}
+	
+	@ResponseBody
+	@GetMapping("nicknameCheck")
+	public int nicknameCheck(@RequestParam("nickname") String nickname) {
+		return service.nicknameCheck(nickname);
+	}
+	
+	
+	
 	
 }
 
 
-/* Cookie란?
- * - 클라이언트 측(브라우저)에서 관리하는 데이터(파일 형식)
- * 
- * - Cookie에는 만료기간, 데이터(key=value), 사용하는 사이트(주소)
- *  가 기록되어 있음
- *  
- * - 클라이언트가 쿠키에 기록된 사이트로 요청으로 보낼 때
- *   요청에 쿠키가 담겨져서 서버로 넘어감
- *   
- * - Cookie의 생성, 수정, 삭제는 Server가 관리
- *   저장은 Client가 함
- *   
- * - Cookie는 HttpServletResponse를 이용해서 생성,
- *   클라이언트에게 전달(응답) 할 수 있다
- */
 
