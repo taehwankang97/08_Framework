@@ -103,18 +103,100 @@ const selectMemberList = () => {
       loginBtn.innerText = "로그인";
       th4.append(loginBtn);
 
+      // 만약 탈퇴 상태의 경우 로그인 버튼 비활성화 
+      if(member.memberDelFl === 'Y'){
+        loginBtn.disabled = true;
+      } else {
+
+        // 탈퇴 상태가 아닌 경우 
+        // 만들어진 로그인 버튼에 이벤트를 추가 
+        loginBtn.addEventListener("click", ()=>{
+
+          //body 태그 제일 마지막에 form 태그를 추가해 
+          // 제출하는 형식으로 코드 작성
+          // 왜? POST 방식 요청을 하고 싶기 때문에
+
+          const form = document.createElement("form");
+          form.action = "/directLogin";
+          form.method = "POST";
+
+          const input = document.querySelector("input");
+          input.type = "hidden";
+          input.name = "memberNo"
+          input.value = member.memberNo;
+
+
+          form.append(input); // form 자식으로 input 추가 
+
+          // body태그 자식으로 form 추가
+          document.querySelector("body").append(form);
+
+          form.submit();
+
+        })
+
+      }
+
+
       // th > button 만들어서 "비밀번호 초기화" 글자 세팅
       const th5 = document.createElement("th");
       const initBtn = document.createElement("button");
       initBtn.innerText = "비밀번호 초기화";
       th5.append(initBtn);
 
+      // 비밀번호 초기화 
+
+      initBtn.addEventListener("click", () => {
+
+        fetch("/resetPw" , {
+          method : "POST",
+          headers : {"Content-Type" : "application/json"},
+          body : member.memberNo
+        })
+        .then(response => {
+          if(response.ok) return response.text();
+          throw new Error("변경오류");
+        })
+        .then(result => {
+          
+          if(result > 0 ){
+            alert("초기화 되었습니다");
+          }else{
+          alert("초기화가 되지 않았습니다");
+          }
+        })
+        .catch(err => console.error(err));
+      })
+
+
+
       // th > button 만들어서 "탈퇴 상태 변경" 글자 세팅
       const th6 = document.createElement("th");
       const changeBtn = document.createElement("button");
       changeBtn.innerText = "탈퇴 상태 변경";
       th6.append(changeBtn);
+      changeBtn.addEventListener("click" , () =>{
+        fetch("/changeBtn",{
+          method : "PUT",
+          headers : {"Content-Type" : "application/json"},
+          body : member.memberNo
+        })
+        .then(response =>{
+          if(response.ok) return response.text();
+          throw new Error("상태변경이 되지 않았습니다");
+        })
+        .then(result => {
 
+          if(result > 0){
+            alert("변경 되었습니다");
+            selectMemberList();
+          }else{
+            alert("변경 실패")
+          }
+        })
+        .catch(err => console.error(err));
+
+      })
       // tr에 만든 th,td 모두 추가
       tr.append(th1, td2, th3, th4, th5, th6);
 
@@ -126,3 +208,9 @@ const selectMemberList = () => {
   .catch(err => console.error(err));
 
 }
+
+/* 페이지 로딩(렌더링) 끝난 후 수행 */
+document.addEventListener("DOMContentLoaded", () => {
+  selectMemberList();
+})
+

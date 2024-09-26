@@ -2,6 +2,7 @@ package edu.kh.project.main.service;
 
 import java.util.List;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,10 +15,31 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MainServiceImpl implements MainService{
 	private final MainMapper mapper;
-	
-	@Override
+	private final BCryptPasswordEncoder encoder;
+ 	@Override
 	public List<Member> selectMemberList() {
 		
 		return mapper.selectMemberList();
 	}
+	// 빠른 로그인
+@Override
+public Member directLogin(int memberNo) {
+	
+	
+	return mapper.directLogin(memberNo);
+}
+@Override
+public int resetPw(int memberNo) {
+	
+	String encPw = encoder.encode("pass01!");
+	
+	return mapper.resetPw(memberNo , encPw);
+}
+
+@Override
+public int changeBtn(int memberNo) {
+	
+	return mapper.changeBtn(memberNo);
+}
+
 }

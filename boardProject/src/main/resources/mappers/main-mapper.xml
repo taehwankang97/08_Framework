@@ -8,5 +8,40 @@
 		WHERE MEMBER_NO > 0
 		ORDER BY MEMBER_NO ASC
 	</select>
+	
+	 <!-- 빠른 로그인 -->
+  <select id="directLogin" resultType="Member">
+  	SELECT 
+	  	MEMBER_NO, 
+	  	MEMBER_EMAIL, 
+	  	MEMBER_NICKNAME, 
+	  	MEMBER_PW,
+		MEMBER_TEL, 
+		MEMBER_ADDRESS, 
+		PROFILE_IMG, 
+		AUTHORITY,
+		TO_CHAR(ENROLL_DATE, 
+			'YYYY"년" MM"월" DD"일" HH24"시" MI"분" SS"초"') ENROLL_DATE
+	FROM "MEMBER"
+	WHERE MEMBER_NO = #{memberNo}
+	AND   MEMBER_DEL_FL = 'N'
+  </select>
+  
+  <update id="resetPw">
+  	UPDATE "MEMBER"
+  	SET MEMBER_PW = #{encPw}
+  	WHERE MEMBER_NO = #{memberNo}
+  </update>
+
+<update id="changeBtn">
+	UPDATE "MEMBER"
+	SET MEMBER_DEL_FL = DECODE(MEMBER_DEL_FL, 'N', 'Y', 'N')
+	WHERE MEMBER_NO = #{memberNo}
+	
+</update>
+
+
+
+
 
 </mapper>
