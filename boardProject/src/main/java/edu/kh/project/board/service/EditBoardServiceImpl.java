@@ -69,7 +69,7 @@ public class EditBoardServiceImpl implements EditBoardService{
 			BoardImg img = BoardImg.builder()
 					.imgOriginalName(originalName) // 원본명
 					.imgRename(rename) //변경명
-					.imgPath(rename) // 웹접근 경로
+					.imgPath(webPath)// 웹접근 경로
 					.boardNo(boardNo) // 이미지가 삽입된 게시글 번호
 					.imgOrder(i) // 5개의 이미지 칸 중에서 제출된 칸의 순서
 					.uploadFile(images.get(i)) // 실제 업로드된 이미지 데이터
