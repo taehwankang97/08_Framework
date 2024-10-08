@@ -491,3 +491,8 @@ label[for="headerMenuToggle"]:hover{
   background-color: grey;
 }
 
+/* 현재 보고있는 게시판 */
+.current-board{ 
+  background-color: var(--main-color); 
+  color: white;
+} 

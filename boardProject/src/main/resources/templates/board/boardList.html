@@ -63,7 +63,7 @@
                                      class="list-thumbnail">
                                     <!-- 상세조회 요청 주소 /board/{boardCode}/{boradNo} -->
                                      <!-- boardCode = 1 -> 수정할 예정 -->
-                                    <a th:href="@{/board/{boardCode}/{boardNo} (boardCode=1, boardNo=*{boardNo})}"  
+                                    <a th:href="@{/board/{boardCode}/{boardNo} (boardCode=${boardCode}, boardNo=*{boardNo})}"  
                                     th:text="*{boardTitle}">게시글 제목</a>
                                     <th:block th:text="|[*{commentCount}]|"></th:block> <!-- 댓글 수 -->
                                 </td>

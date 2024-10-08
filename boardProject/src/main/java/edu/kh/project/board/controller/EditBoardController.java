@@ -92,7 +92,7 @@ public class EditBoardController {
 			/*
 			 * path = "/board/" + boardCode + "/" + boardNo; // 상세 조회
 			 */	
-			path = "/board/" + boardCode ; // 목록 조회 주소 (임시)
+			path = "/board/" + boardCode+ "/" + boardNo ; // 목록 조회 주소 (임시)
 			message = "게시글 작성 되었습니다";
 		}
 		ra.addFlashAttribute("message",message);

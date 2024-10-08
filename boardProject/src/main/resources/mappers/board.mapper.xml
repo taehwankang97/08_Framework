@@ -143,7 +143,13 @@
 		(SELECT IMG_PATH || IMG_RENAME
 		 FROM BOARD_IMG I
 		 WHERE I.BOARD_NO = #{boardNo}
-		 AND IMG_ORDER = 0) AS THUMBNAIL
+		 AND IMG_ORDER = 0) AS THUMBNAIL,
+		 
+		 (SELECT COUNT(*)
+		 FROM "BOARD_LIKE"
+		 WHERE BOARD_NO = #{boardNo}
+		 AND MEMBER_NO = #{memberNo})AS LIKE_CHECK
+		 
 		
 	FROM "BOARD" B
 	JOIN "MEMBER" M ON (B.MEMBER_NO = M.MEMBER_NO)
@@ -178,6 +184,55 @@ START WITH PARENT_COMMENT_NO IS NULL
 CONNECT BY PRIOR COMMENT_NO = PARENT_COMMENT_NO
 ORDER SIBLINGS BY COMMENT_NO
   </select>
+  
+  <!-- 해당 게시글의 조회수 ++ 시키기  -->
+  <update id="updateReadCount">
+   UPDATE "BOARD"
+   SET
+   	BOARD_COUNT = BOARD_COUNT + 1 
+   WHERE 
+   	BOARD_NO = #{boardNo}
+  </update>
+  
+  <!-- 좋아요 여부 검사  -->
+  <select id="checkBoardLike" resultType="_int">
+  	SELECT COUNT(*)
+  	FROM"BOARD_LIKE"
+  	WHERE MEMBER_NO = #{memberNo}
+  	AND BOARD_NO = #{boardNo}
+  </select>
+  
+  <!-- 좋아요 테이블 INSERT -->
+  <insert id="insertBoardLike">
+  	INSERT INTO "BOARD_LIKE" (MEMBER_NO, BOARD_NO)
+  	VALUES(#{memberNo}, #{boardNo})
+  </insert>
+  
+  <!-- 좋아요 테이블 DELETE  -->
+  
+ <delete id="deleteBoardLike">
+  	DELETE FROM "BOARD_LIKE"
+	WHERE MEMBER_NO = #{memberNo}
+  	AND   BOARD_NO  = #{boardNo}
+  </delete>
+  
+  <!-- 좋아요 개수 조회 -->
+  <select id="getLikeCount" resultType="_int">
+  SELECT COUNT(*)
+  FROM "BOARD_LIKE"
+  WHERE BOARD_NO = #{boardNo}
+  </select>
+  
+  <select id="selectBoardTypeList" resultType="map">
+  	SELECT
+  		BOARD_CODE "boardCode",
+  		BOARD_NAME "boardName"
+  	FROM
+  		"BOARD_TYPE"
+  	ORDER BY BOARD_CODE ASC
+  
+  </select>
+  
   
   
   
