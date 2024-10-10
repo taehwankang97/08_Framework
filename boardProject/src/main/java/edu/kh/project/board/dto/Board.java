@@ -49,7 +49,7 @@ public class Board{
 	private String profileImg;
 	
 	// 특정 게시글의 이미지 목록을 저장할 필드
-	private List<BoardImg> imageList;
+	private List<BoardImage> imageList;
 	
 	// 특정 게시글의 댓글 목록을 저장할 필드
 	private List<Comment> commentList;
