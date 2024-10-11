@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.kh.project.board.dto.Board;
+import edu.kh.project.board.dto.Comment;
 import edu.kh.project.board.dto.Pagination;
 import edu.kh.project.board.service.BoardService;
 import edu.kh.project.member.dto.Member;
@@ -239,25 +240,29 @@ public class BoardController {
 		model.addAttribute("board", board);
 		
 		
-		// 조회된 이미지 목록이 있을 경우 
+	/* ------------  조회 수 증가 끝!! ------------ */
+		
+		
+		model.addAttribute("board", board);
+		
+		// 조회된 이미지 목록이 있을 경우
 		if(board.getImageList().isEmpty() == false) {
 			
-			// 썸네일이 X => 0 ~ 3 번 있덱스 
-			// 썸네일이 O => 1 ~ 4 번 인덱스
+			// 썸네일 X -> 0~3 번 인덱스
+			// 썸네일 O -> 1~4 번 인덱스
 			
 			// for문 시작 인덱스 지정
 			int start = 0;
 			
-			// 썸네일이 dlT을 경우 
-			//if(board.getImageList().get(0).getImgOrder() == 0)  == 
-			if(board.getThumbnail() != null)
-			 start = 1;
+			// 썸네일이 있을 경우
+//		if(board.getImageList().get(0).getImgOrder() != 0) 
+			if(board.getThumbnail() != null) start = 1;
 			
 			model.addAttribute("start", start); // 0 또는 1
 		}
-		
 		return "board/boardDetail";
 	}
+	
 	
 	/** 좋아요 체크 or 해제
 	 * @param boardNo
@@ -272,6 +277,52 @@ public class BoardController {
 		
 		return service.boardLike(boardNo,memberNo);
 	}
+
+	
+	/** 댓글 목록 조회(비동기)
+	 * @param boardNo : 게시글 번호(쿼리스트링 전달 받음)
+	 * @param model : forward 대상에게 대이터를 전달 하는 객체
+	 * @return
+	 */
+	@GetMapping("commentList")
+	public String selectCommentList(
+		@RequestParam("boardNo") int boardNo,
+		Model model) {
+		
+		List<Comment> commentList = service.selectCommentList(boardNo);
+		/* * 보통 비동기 통신(AJAX) 방법
+		 *  - 요청 -> 응답 (데이터)
+		 * 
+		 * * forward
+		 *  - 요청 위임
+		 *  - 요청에 대한 응답 화면 생성을 
+		 *    템플릿 엔진(jsp, Thymeleaf)이 대신 수행
+		 * 
+		 * - 동기식 X,
+		 * 	템플릿 엔진을 이용해서 html 코드를 쉽게 생성
+		 * 
+		 * @Resonsbody 
+		 * - 컨트롤러에서 반환 되는 값을 
+		 * 응답 본문에 그대로 반환 
+		 * -> 템플릿 엔진(thymleaf)를 이용해서 html 코드를 
+		 * 만들어서 반환 X
+		 * 데이터 있는 그대로를 반환
+		 */
+		
+		// Board  객체 생성
+		Board board = Board.builder().commentList(commentList).build();
+		
+		// "board" 라는 key 값으로 생성한 Board 객체를 
+		// forward 대상인 comment.html 로 전달
+		model.addAttribute("board", board);
+		
+		// comment.html중 comment-list 조각 (fragment)에
+		// 작성된 thymeleaf 코드를 해석해서 
+		// 완전한 HTML 코드로 변환 후 
+		// 요청한 곳으로 응답 ( fetch() API 코드로 html 코드가 변환)
+		return "board/comment :: comment-list";
+	}
+	
 	
 	
 	

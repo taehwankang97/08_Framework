@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.kh.project.board.dto.Board;
+import edu.kh.project.board.dto.Comment;
 import edu.kh.project.board.service.BoardService;
 import edu.kh.project.board.service.EditBoardService;
 import edu.kh.project.member.dto.Member;
@@ -249,6 +250,6 @@ public class EditBoardController {
 		
 		return String.format("redirect:/board/%d/%d", boardCode, boardNo); // 상세조회
 	}
-	
+
 	
 }

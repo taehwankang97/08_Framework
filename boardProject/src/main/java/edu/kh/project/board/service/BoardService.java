@@ -3,7 +3,11 @@ package edu.kh.project.board.service;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import edu.kh.project.board.dto.Board;
+import edu.kh.project.board.dto.Comment;
 
 public interface BoardService {
 
@@ -39,4 +43,12 @@ public interface BoardService {
 	 */
 	List<Map<String, String>> selectBoardTypeList();
 
+	/** 댓글 목록 조회
+	 * @param boardNo
+	 * @return commentList
+	 */
+		List<Comment> selectCommentList(int boardNo);
+
+	
+		
 }

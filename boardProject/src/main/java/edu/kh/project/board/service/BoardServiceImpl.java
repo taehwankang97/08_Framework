@@ -8,6 +8,7 @@ import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
 
 import edu.kh.project.board.dto.Board;
+import edu.kh.project.board.dto.Comment;
 import edu.kh.project.board.dto.Pagination;
 import edu.kh.project.board.mapper.BoardMapper;
 import lombok.RequiredArgsConstructor;
@@ -143,6 +144,14 @@ public Map<String, Object> boardLike(int boardNo, int memberNo) {
 @Override
 public List<Map<String, String>> selectBoardTypeList() {
 	return mapper.selectBoardTypeList();
+	
+}
+
+
+// 댓글 목록 조회
+@Override
+public List<Comment> selectCommentList(int boardNo) {
+	return mapper.selectCommentList(boardNo);
 }
 
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
 import edu.kh.project.board.dto.Board;
+import edu.kh.project.board.dto.Comment;
 import edu.kh.project.member.dto.Member;
 
 public interface EditBoardService {
@@ -31,5 +32,6 @@ public interface EditBoardService {
 	 * @return 
 	 */
 int boardUpdate(Board inputBoard, List<MultipartFile> images, String deleteOrderList);
+
 
 }
