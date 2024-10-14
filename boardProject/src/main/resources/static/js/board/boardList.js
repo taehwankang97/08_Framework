@@ -24,32 +24,90 @@ pageNoList?.forEach( (item, index) => {
       return;
     } 
 
-    const pathname = location.pathname;
+    //const -> let으로 변경
+    let pathname = location.pathname;
   
 
     // 클릭된 버튼이 <<, <, >, >> 인 경우
     // console.log(item.innerText);
     switch(item.innerText){
       case '<<' : // 1페이지로 이동
-      location.href = pathname + "?cp=1";
+       pathname += "?cp=1";
       break;
       case '<'  : // 이전 페이지
-      location.href = pathname +"?cp=" + pagination.prevPage;
+       pathname += "?cp=" + pagination.prevPage;
        break;
       case '>'  : // 다음 페이지
-      location.href = pathname +"?cp=" + pagination.nextPage;
+      pathname += "?cp=" + pagination.nextPage;
       break;
       case '>>' : // 마지막 페이지
-      location.href = pathname +"?cp=" + pagination.maxPage;
+       pathname += "?cp=" + pagination.maxPage;
       break;
       default: // 클릭한 숫자 페이지로 이동
-      location.href = pathname + "?cp=" + item.innerText
+       pathname += "?cp=" + item.innerText
+    }
+/* 검색인 경우 pathname 변수 뒤에 쿼리스트링 추가 */
+
+    // URLSearchParams : 쿼리스트링을 관리하는 객체 
+    // -쿼리스트링 생성, 기존 쿼리 스트링을 k:v 형태로 분할 관리
+    const params = new URLSearchParams(location.search); // k가 "key"인 요소의 값"
+
+
+    const key = params.get("key"); // k가 "query"인 요소의 값"
+    const query = params.get("query");
+    if(key !== null){ // 검색인 경우
+
+      pathname += `&key=${key}&query=${query}`
+
     }
 
+    //페이지 이동
+    location.href = pathname;
 
   });
 
-})
+});
+
+//---------------------------------------------------------------------
+
+
+/* 쿼리스트링에 검색 기록이 있을 경우 화면에 똑같이 선택/출력하기 */
+
+//즉시 실행 함수
+// - 변수명 중복 문제 해결 + 약간의 속도적 우위를 가지는 함수
+// [작성법]
+// (()=>{})()
+
+  (()=>{
+    // 쿼리스트링 모두얻어와 관리하는 객체
+    const params = new URLSearchParams(location.search);
+
+    const key = params.get("key");
+    const query = params.get("query");
+
+    if(key === null)return;// 검색이 아니면 함수 종료
+
+    document.querySelector("#searchQuery").value = query;
+
+    // 검색 조건 선택하기 
+
+    const options = document.querySelectorAll("#searchKey > option")
+
+    options.forEach( op => {
+      // op : <option>
+      if(op.value === key){ //option의 value와 key가 같다면 
+        op.selected = true; // selected 속성 추가
+        return;
+
+
+      }
+
+
+    })
+
+  })();
+
+
 
 
 //---------------------------------------------------------------------------------

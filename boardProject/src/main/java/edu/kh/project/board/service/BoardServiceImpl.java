@@ -154,4 +154,34 @@ public List<Comment> selectCommentList(int boardNo) {
 	return mapper.selectCommentList(boardNo);
 }
 
+// 검색목록 조회
+@Override
+public Map<String, Object> selectSearchList(int boardCode, int cp, Map<String, Object> paramMap) {
+
+	//1. 지정된 게시판에서 검색조건이 일치하는 게시글이 
+	// 몇 개나 존재하는지 조회
+	
+	paramMap.put("boardCode", boardCode);// boardCode도 paramMap에 추가
+	
+	int searchCount = mapper.getSearchCount(paramMap);
+	
+	// 2.Pagination 객체 생성 하기 
+	Pagination pagination = new Pagination(cp, searchCount);
+	
+	//3. DB에서 cp(조회 하려는 페이지)에 해당하는 행을 조회
+	int limit = pagination.getLimit(); //10
+	int offset = (cp - 1) * limit;
+	RowBounds rowBounds = new RowBounds(offset, limit);
+	
+	// 4. 검색 결과 + Pagenation 객체를 Map으로 묶어서 반환
+	List<Board> boardList = mapper.selectSearchList(paramMap, rowBounds);
+	
+	Map<String, Object> map = new HashMap<>();
+	map.put("boardList", boardList);
+	map.put("pagination", pagination);
+	
+	
+	return map;
+}
+
 }
