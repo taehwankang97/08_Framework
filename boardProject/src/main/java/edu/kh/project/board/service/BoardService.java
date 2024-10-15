@@ -57,6 +57,12 @@ public interface BoardService {
 		 */
 	Map<String, Object> selectSearchList(int boardCode, int cp, Map<String, Object> paramMap);
 
+	/** 목록으로 이동 페이지
+	 * @param paramMap
+	 * @return
+	 */
+		int getCurrentPage(Map<String, Object> paramMap);
+
 	
 		
 }

@@ -184,4 +184,11 @@ public Map<String, Object> selectSearchList(int boardCode, int cp, Map<String, O
 	return map;
 }
 
+// 목록으로 이동 페이지  
+@Override
+public int getCurrentPage(Map<String, Object> paramMap) {
+	
+	return mapper.getCurrentPage(paramMap);
+}
+
 }

@@ -87,6 +87,12 @@ public interface BoardMapper {
 	 */
 	List<Board> selectSearchList(Map<String, Object> paramMap, RowBounds rowBounds);
 
+	/** 목록으로 이동
+	 * @param paramMap
+	 * @return
+	 */
+	int getCurrentPage(Map<String, Object> paramMap);
+
 
 
 }

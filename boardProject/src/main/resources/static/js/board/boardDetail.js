@@ -6,40 +6,40 @@ const boardLike = document.querySelector("#boardLike");
 boardLike.addEventListener("click", e => {
 
   // 1. 로그인 여부 검사
-  if(loginCheck === false){
+  if (loginCheck === false) {
     alert("로그인 후 이용해 주세요");
     return;
   }
-  
+
 
   // 2. 비동기로 좋아요 요청
   fetch("/board/like", {
-    method : "POST",
-    headers : {"Content-Type" : "application/json"},
-    body : boardNo
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: boardNo
   })
-  .then(response => {
-    if(response.ok) return response.json();
-    throw new Error("좋아요 실패");
-  })
-  .then(result => {
-  //  console.log("result : ", result);
+    .then(response => {
+      if (response.ok) return response.json();
+      throw new Error("좋아요 실패");
+    })
+    .then(result => {
+      //  console.log("result : ", result);
 
-  // 좋아요 결과가 담긴 result 객체의 check 값에 따라 
-  // 하트 아이콘을 비우기 / 채우기 결정
-  if(result.check === 'insert'){
-    boardLike.classList.add("fa-solid");
-    boardLike.classList.remove("fa-regular");
-  }else{ // 비우기
-    boardLike.classList.add("fa-regular");
-    boardLike.classList.remove("fa-solid");
-  }
-  // 좋아요 하트 다음 형제 요소의 내용을 
-  // result.count로 변경
-  boardLike.nextElementSibling.innerText = result.count; 
-    
-  })
-  .catch(err => console.error(err));
+      // 좋아요 결과가 담긴 result 객체의 check 값에 따라 
+      // 하트 아이콘을 비우기 / 채우기 결정
+      if (result.check === 'insert') {
+        boardLike.classList.add("fa-solid");
+        boardLike.classList.remove("fa-regular");
+      } else { // 비우기
+        boardLike.classList.add("fa-regular");
+        boardLike.classList.remove("fa-solid");
+      }
+      // 좋아요 하트 다음 형제 요소의 내용을 
+      // result.count로 변경
+      boardLike.nextElementSibling.innerText = result.count;
+
+    })
+    .catch(err => console.error(err));
 
 
 })
@@ -52,14 +52,14 @@ boardLike.addEventListener("click", e => {
 
   - 서버 (java) 에서 로그인한 회원 번호를 얻어와
     로그인한 회원이 작성한 글이 맞는지 SQL에서 검사
-*/ 
+*/
 // 삭제 버튼 요소 얻어오기
 const deleteBtn = document.querySelector("#deleteBtn");
 
 // 삭제 버튼이 존재할 때 이벤트 리스너 추가
 deleteBtn?.addEventListener("click", () => {
 
-  if(confirm("정말 삭제 하시겠습니까?") == false){
+  if (confirm("정말 삭제 하시겠습니까?") == false) {
     return;
   }
 
@@ -80,7 +80,7 @@ deleteBtn?.addEventListener("click", () => {
   form.append(input); // form 자식으로 input 추가
 
   // body 자식으로 form 추가
-  document.querySelector("body").append(form); 
+  document.querySelector("body").append(form);
 
   form.submit(); // 제출
 })
@@ -99,16 +99,48 @@ deleteBtn?.addEventListener("click", () => {
 // 수정버튼 요소 얻어오기
 const updateBtn = document.querySelector("#updateBtn");
 
-updateBtn?.addEventListener("click",()=>{
+updateBtn?.addEventListener("click", () => {
 
   // form 태그 생성
   const form = document.createElement("form");
-  
+
   // editBoard.{boardCode}/{boardNo}/updateVeiw
-  form.action = location.pathname.replace("board","editBoard") + "/updateView";
+  form.action = location.pathname.replace("board", "editBoard") + "/updateView";
   form.method = "POST";
 
   document.querySelector("body").append(form);
   form.submit();
+
+})
+
+
+// ----------------------------------------------------------------
+
+/* 목록으로 버튼 클릭시 */
+const goToListBtn = document.querySelector("#goToListBtn");
+
+goToListBtn.addEventListener("click", () => {
+
+  // 페이지당 게시글 수
+  let limit = 10;
+
+  location.href = location.pathname + "/goToList?limit=" + limit;
+
+  // board/{boardCode}/{boardNo}/goToList?limit=10
+
+  /* location.search : 쿼리스트링 반환 */
+  // URLSearchParams 객체 : 쿼리스트링 관리하는 객체
+  const params = new URLSearchParams(location.search);
+
+  if (params.get("key") !== null) {
+
+    url += `&key=${params.get("key")}&query=${params.get("query")}`; // 백틱 스트링 템플릿
+
+    location.href = url;
+    // /board/{boardCode}/{boardNo}/goToList
+    // (검색 X) ?limit=10
+    // (검색 O) ?limit=10&key=t&query=검색어
+
+  }
 
 })
