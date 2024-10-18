@@ -3,6 +3,7 @@ package edu.kh.project.sse.service;
 import java.util.List;
 import java.util.Map;
 
+import edu.kh.project.member.dto.Member;
 import edu.kh.project.sse.dto.Notification;
 
 public interface SseService {
@@ -19,5 +20,21 @@ public interface SseService {
 	 * @return
 	 */
 	List<Notification> selectNotificationList(int memberNo);
+
+	/**읽지 않은 알람 조회
+	 * @param loginMember
+	 * @return
+	 */
+	int notReadcheck(int memberNo);
+
+	/** 알림 삭제
+	 * @param notificationNo
+	 */
+	void deleteNotification(int notificationNo);
+
+	/** 알림 읽음 처리
+	 * @param notificationNo
+	 */
+	void updatNotification(int notificationNo);
 
 }

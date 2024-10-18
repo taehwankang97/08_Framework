@@ -87,6 +87,30 @@
 		ORDER BY NOTIFICATION_NO DESC
  </select>
  
+ <select id="notReadCheck" resultType="_int">
+ 	SELECT COUNT(*)
+ 	FROM "NOTIFICATION"
+ 	WHERE NOTIFICATION_CHECK = 'N'
+ 	AND
+ 	RECEIVE_MEMBER_NO = #{memberNo}
+ </select>
+ 
+ <delete id="deleteNotification">
+ 	DELETE
+ 	FROM "NOTIFICATION"
+ 	WHERE NOTIFICATION_NO = #{notificationNo}
+ 
+ </delete>
+ 
+ <update id="updateNotification">
+ 
+ 	UPDATE "NOTIFICATION"
+ 	SET 
+ 		NOTIFICATION_CHECK = 'Y'
+ 	WHERE
+ 		NOTIFICATION_NO = #{notificationNo}
+ 	
+ </update>
  
  
  

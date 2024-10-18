@@ -30,6 +30,18 @@ boardLike.addEventListener("click", e => {
       if (result.check === 'insert') {
         boardLike.classList.add("fa-solid");
         boardLike.classList.remove("fa-regular");
+
+        // 게시글 작성자에게 알림 보내기
+        const content = `<strong>${memberNickname}</strong> 님이<strong>${boardDetail.boardTitle}</strong> 게시글에 좋아요를 눌렀습니다`
+        
+        // type, url
+        sendNotification(
+          "boardLike",
+          location.pathname, // 게시글 상세 조회 페이지 주소
+          boardDetail.boardNo ,
+          content
+        );
+
       } else { // 비우기
         boardLike.classList.add("fa-regular");
         boardLike.classList.remove("fa-solid");
