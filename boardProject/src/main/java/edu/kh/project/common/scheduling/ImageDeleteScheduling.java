@@ -30,7 +30,7 @@ public class ImageDeleteScheduling {
 	
 	
 	// 0초 시작, 20초가 지날 때 마다 수행 (0, 20, 40 초)
-	@Scheduled(cron = "0/20 * * * * *")
+	@Scheduled(cron = "0 0 * * * *") // 정각마다 수행  /*프로젝트에 꼭 넣어 안그럼 용량 부족하다*/
 	public void imageDelete() {
 		
 		//1. DB에 저장되어 있는 파일명 모두 조회
