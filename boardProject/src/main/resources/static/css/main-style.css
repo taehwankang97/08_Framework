@@ -628,8 +628,3 @@ header>section:nth-child(3) {
 .notification-item:hover > .notification-text{
   text-decoration: underline;
 }
-
-
-
-.chat-preview{
-  word-break: break-word;
