@@ -51,11 +51,11 @@ public class EmailSerciveImpl implements EmailService{
 			// 이메일 제목, 내용을 다르게 설정
 			switch(htmlName) {
 			case "signUp" :
-				emailTitle = "[boardProject] 회원 가입 인증번호 입니다.";
+				emailTitle = " 대모임 회원 가입 인증번호 입니다.";
 				break;
 				
 			case "findPw" :
-				emailTitle = "[boardProject] 비밀번호 찾기 인증번호 입니다.";
+				emailTitle = " 대모임 비밀번호 찾기 인증번호 입니다.";
 				break;
 			}
 /*----- 메일 발송 -----*/
